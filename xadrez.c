@@ -1,72 +1,107 @@
 #include <stdio.h>
 
-    int main() {
-    const int MOVIMENTOS_TORRE = 5;
-    const int MOVIMENTOS_BISPO = 5;
-    const int MOVIMENTOS_RAINHA = 8;
-    const int CAVALO_MOV_BAIXO = 2; // 
-    const int CAVALO_MOV_ESQUERDA = 1; 
 
+#define MOV_TORRE 5
+#define MOV_BISPO 5
+#define MOV_RAINHA 8
+#define CAVALO_MOV_CIMA 2
+#define CAVALO_MOV_DIREITA 1
+
+
+void moverTorre(int movimentos);
+void moverRainha(int movimentos);
+void moverBispo(int movimentos);
+
+int main() {
     
-   // --- MOVIMENTO DA TORRE ---
-    // Requisito: for
-    printf("--- Movimento da Torre ---\n");
-    for (int i = 0; i < MOVIMENTOS_TORRE; i++) {
-        printf("Direita\n");
-    }
-    printf("\n"); // Pula linha para organização
-
-    // --- MOVIMENTO DO BISPO ---
-    // Requisito: while
-    printf("--- Movimento do Bispo ---\n");
-    int contador_bispo = 0;
-    while (contador_bispo < MOVIMENTOS_BISPO) {
-        printf("Cima, Direita\n");
-        contador_bispo++;
-    }
+    
+    printf("--- Movimento da Torre (Recursivo) ---\n");
+    moverTorre(MOV_TORRE); // Chama a função recursiva
     printf("\n");
 
-    // --- MOVIMENTO DA RAINHA ---
-    // Requisito: do-while
-    printf("--- Movimento da Rainha ---\n");
-    int contador_rainha = 0;
-    do {
-        printf("Esquerda\n");
-        contador_rainha++;
-    } while (contador_rainha < MOVIMENTOS_RAINHA);
+    
+    printf("--- Movimento do Bispo (Recursivo + Loops Aninhados) ---\n");
+    moverBispo(MOV_BISPO);
     printf("\n");
 
-    // --- MOVIMENTO DO CAVALO (NOVO - NÍVEL INTERMEDIÁRIO) ---
-    // Requisito: Loops aninhados (for e while) para simular o 'L'.
-    // Lógica: O Cavalo faz um movimento composto: primeiro vertical, depois horizontal.
     
-    printf("--- Movimento do Cavalo ---\n");
+    printf("--- Movimento da Rainha (Recursivo) ---\n");
+    moverRainha(MOV_RAINHA);
+    printf("\n");
 
-    // Loop Externo (FOR): Gerencia as "fases" do movimento do Cavalo.
-    // i = 0: Fase Vertical (Baixo)
-    // i = 1: Fase Horizontal (Esquerda)
-    // Usamos um loop complexo aqui para simular a decisão de "troca de direção".
-    for (int i = 0; i < 2; i++) {
+   
+    printf("--- Movimento do Cavalo (Loops Complexos) ---\n");
+
+    
+    for (int i = 0, j = 0; i < CAVALO_MOV_CIMA; i++, j++) {
         
-        int j = 0; // Contador para o loop interno
+        printf("Cima\n");
 
-        // Se estivermos na primeira iteração (i=0), fazemos o movimento vertical
-        if (i == 0) {
-            // Loop Interno (WHILE): Controla as casas percorridas na vertical
-            while (j < CAVALO_MOV_BAIXO) {
-                printf("Baixo\n");
-                j++;
-            }
-        } 
-        // Se estivermos na segunda iteração (i=1), fazemos o movimento horizontal
-        else {
-            // Loop Interno (WHILE): Controla as casas percorridas na horizontal
-            while (j < CAVALO_MOV_ESQUERDA) {
-                printf("Esquerda\n");
-                j++;
+        
+        if (j < (CAVALO_MOV_CIMA - 1)) {
+            continue; 
+        }
+
+       
+        int k = 0;
+        while (k < CAVALO_MOV_DIREITA) {
+            printf("Direita\n");
+            k++;
+            
+            
+            if (k >= CAVALO_MOV_DIREITA) {
+                break; 
             }
         }
     }
-    
+
     return 0;
+}
+
+// --- IMPLEMENTAÇÃO DAS FUNÇÕES RECURSIVAS ---
+
+/*
+ * Função: moverTorre
+ * Lógica: Recebe o número de movimentos restantes.
+ * Se ainda houver movimentos (> 0), imprime a direção e chama a si mesma
+ * subtraindo 1 do contador. Isso cria um loop sem usar 'for' ou 'while'.
+ */
+void moverTorre(int movimentos) {
+    if (movimentos > 0) {
+        printf("Direita\n");
+        moverTorre(movimentos - 1); // Chamada recursiva
+    }
+    // Caso base (movimentos == 0): A função termina automaticamente.
+}
+
+/*
+ * Função: moverRainha
+ * Lógica: Similar à Torre, mas para a direção Esquerda.
+ */
+void moverRainha(int movimentos) {
+    if (movimentos > 0) {
+        printf("Esquerda\n");
+        moverRainha(movimentos - 1); // Chamada recursiva
+    }
+}
+
+/*
+ * Função: moverBispo
+ * Lógica: Combina recursividade (para o total de casas) com Loops Aninhados (para a lógica do movimento).
+ * Requisito Mestre: Loop externo (Vertical) e interno (Horizontal).
+ */
+void moverBispo(int movimentos) {
+    if (movimentos > 0) {
+        // Loop Externo: Simula o componente Vertical do movimento diagonal
+        for (int v = 0; v < 1; v++) {
+            
+            // Loop Interno: Simula o componente Horizontal do movimento diagonal
+            for (int h = 0; h < 1; h++) {
+                // Ao combinar 1 passo vertical e 1 horizontal, temos a diagonal
+                printf("Cima, Direita\n");
+            }
+        }
+        
+        moverBispo(movimentos - 1); // Chamada recursiva para o próximo passo
+    }
 }
